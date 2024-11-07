@@ -1,11 +1,9 @@
 import { Bot } from "grammy";
 import { InlineKeyboardButton } from "grammy/types";
-import { createPayment } from "./payment/payment";
-
-require("dotenv").config();
+import { createPayment } from "./src/bot/handlers/payment";
 
 const IMG_URI = "https://nazarly.digital/Untitled2.png";
-export const bot = new Bot(process.env.BOT_TOKEN!);
+export const bot = new Bot("7472733171:AAGMZuGCVkgvUb6VPzP6SH_83TAM4PPZ3t4");
 
 const CALLBACK_ACTIONS = {
   QUESTION_1_OPTION_1: "1.1",
@@ -73,7 +71,7 @@ const sendSecondQuestion = async (userId: number) => {
 
 bot.command("start", async (ctx) => {
   const userId = ctx.message?.chat.id!;
-  createPayment();
+  //   createPayment();
   //   sendFirstQuestion(userId);
 });
 
