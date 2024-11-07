@@ -101,9 +101,9 @@ const sendSubscritionPlans = async (userId: number) => {
 
 bot.command("start", async (ctx) => {
   const userId = ctx.message?.chat.id!;
-  createPayment(userId, 100);
-  0;
-  //   sendFirstQuestion(userId);
+  // createPayment(userId, 100);
+  // 0;
+  sendFirstQuestion(userId);
 });
 
 bot.on("callback_query:data", async (ctx) => {
