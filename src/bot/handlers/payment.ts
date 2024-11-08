@@ -15,8 +15,22 @@ export const createPayment = async (userId: number, amount: number) => {
   const timestamp = Date.now();
   const orderId = `${userId}-${timestamp}`;
 
+  const cards = [
+    "card",
+    "card_kzt",
+    "card_uzs",
+    "card_azn",
+    "card_kgs",
+    " skinpay",
+    "yandexmoney",
+    "payeer",
+    "crypta",
+    "sbp",
+    "clever",
+  ];
+
   const response = await axios.post(
-    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${userId}`
+    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${orderId}&list=${cards}`
   );
   // const url = `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${userId}`;
 
