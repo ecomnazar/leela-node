@@ -153,16 +153,13 @@ bot.on("callback_query:data", async (ctx) => {
       await ctx.reply("Крайний шаг и мы начинаем! Как вас зовут?");
       break;
     case "plan_100":
-      await createPayment(chatId, 100);
-      await ctx.reply("Вы выбрали тариф 100");
+      createPayment(chatId, 100);
       break;
     case "plan_200":
-      await createPayment(chatId, 200);
-      await ctx.reply("Вы выбрали тариф 200");
+      createPayment(chatId, 200);
       break;
     case "plan_300":
-      await createPayment(chatId, 300);
-      await ctx.reply("Вы выбрали тариф 300");
+      createPayment(chatId, 300);
       break;
   }
 
