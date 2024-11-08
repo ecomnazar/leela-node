@@ -1,5 +1,5 @@
 import { Bot } from "grammy";
-import { InlineKeyboardButton } from "grammy/types";
+import { InlineKeyboardButton, InputFile } from "grammy/types";
 import { createPayment } from "./handlers/payment";
 
 require("dotenv").config();
@@ -103,7 +103,21 @@ bot.command("start", async (ctx) => {
   const userId = ctx.message?.chat.id!;
   // createPayment(userId, 100);
   // 0;
-  sendFirstQuestion(userId);
+  // sendFirstQuestion(userId);
+
+  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+  // bot.api.sendAudio(
+  //   userId,
+  //   "https://cdn.pixabay.com/download/audio/2024/10/26/audio_00a1d6db0d.mp3?filename=midnight-quirk-255361.mp3"
+  // );
+
+  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+  // bot.api.sendVideo(
+  //   userId,
+  //   "https://media.istockphoto.com/id/173045943/nl/video/sunrise-at-sea-loopable.mp4?s=mp4-640x640-is&k=20&c=suoYxxNONbOQgeIu9J9fIqYj7vV5DpNik0ZHI74P74Y="
+  // );
 });
 
 bot.on("callback_query:data", async (ctx) => {
@@ -145,6 +159,7 @@ bot.on("message", async (ctx) => {
   }
 
   if (messageText === "pay") {
+    // createPayment(chatId, 100);
     sendSubscritionPlans(chatId);
   }
 });

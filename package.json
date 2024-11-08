@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "npx tsc && node ./src/bot/main.js",
+    "start:p": "npx tsc && node ./src/payments/main.js",
     "dev": "nodemon ./src/bot/main.ts",
     "dev:p": "nodemon ./src/payments/main.ts"
   },
