@@ -22,6 +22,13 @@ const IMG_URI = "https://nazarly.digital/Untitled2.png";
 exports.bot = new grammy_1.Bot(process.env.BOT_TOKEN);
 exports.app = (0, express_1.default)();
 (0, main_1.mainPayment)();
+exports.app.listen(process.env.PAYMENT_BACKEND_PORT, () => __awaiter(void 0, void 0, void 0, function* () {
+    yield exports.bot.api.deleteWebhook();
+    const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+    yield exports.bot.api.setWebhook(webhookUrl);
+    console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+    console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
+}));
 const CALLBACK_ACTIONS = {
     QUESTION_1_OPTION_1: "1.1",
     QUESTION_1_OPTION_2: "1.2",

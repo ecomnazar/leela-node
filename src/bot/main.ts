@@ -8,9 +8,18 @@ require("dotenv").config();
 
 const IMG_URI = "https://nazarly.digital/Untitled2.png";
 export const bot = new Bot(process.env.BOT_TOKEN!);
+
 export const app = express();
 
 mainPayment();
+
+app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
+  await bot.api.deleteWebhook();
+  const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+  await bot.api.setWebhook(webhookUrl);
+  console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+  console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
+});
 
 const CALLBACK_ACTIONS = {
   QUESTION_1_OPTION_1: "1.1",

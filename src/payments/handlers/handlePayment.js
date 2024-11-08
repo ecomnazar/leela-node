@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handlePayment = void 0;
-const bot_1 = require("../../../bot");
 // @ts-ignore
 const handlePayment = (req, res) => {
     const { id, order_id, amount, in_amount, data, createdDateTime, status } = req.body;
@@ -10,7 +9,10 @@ const handlePayment = (req, res) => {
     console.log(`Payment received: ${JSON.stringify(req.body)}`);
     if (status === "PAID") {
         console.log(userTelegramId);
-        bot_1.bot.api.sendMessage(userTelegramId, `Успешный платеж, номер заказа: ${orderId}`);
+        // bot.api.sendMessage(
+        //   userTelegramId,
+        //   `Успешный платеж, номер заказа: ${orderId}`
+        // );
     }
     else {
         console.log("not paid");

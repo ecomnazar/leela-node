@@ -1,6 +1,6 @@
 import express, { Response } from "express";
 import { handlePayment } from "../handlers/handlePayment";
-import { bot } from "../../../bot";
+import { bot } from "../../bot/main";
 
 export const router = express.Router();
 

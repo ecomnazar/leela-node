@@ -1,5 +1,3 @@
-import { bot } from "../../../bot";
-
 interface IPaymentResponse {
   id: number;
   order_id: string;
@@ -22,10 +20,10 @@ export const handlePayment = (req, res) => {
 
   if (status === "PAID") {
     console.log(userTelegramId);
-    bot.api.sendMessage(
-      userTelegramId,
-      `Успешный платеж, номер заказа: ${orderId}`
-    );
+    // bot.api.sendMessage(
+    //   userTelegramId,
+    //   `Успешный платеж, номер заказа: ${orderId}`
+    // );
   } else {
     console.log("not paid");
   }
