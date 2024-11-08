@@ -14,20 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = exports.bot = void 0;
 const grammy_1 = require("grammy");
-const payment_1 = require("./handlers/payment");
 const express_1 = __importDefault(require("express"));
-const main_1 = require("../payments/main");
+const payment_1 = require("./handlers/payment");
+const start_1 = require("./commands/start");
 require("dotenv").config();
 const IMG_URI = "https://nazarly.digital/Untitled2.png";
 exports.bot = new grammy_1.Bot(process.env.BOT_TOKEN);
 exports.app = (0, express_1.default)();
-(0, main_1.mainPayment)();
+// mainPayment();
 exports.app.listen(process.env.PAYMENT_BACKEND_PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     // await bot.api.deleteWebhook();
-    yield exports.bot.init();
-    const webhookUrl = "https://leela.steamp2e.com/webhook-h";
-    yield exports.bot.api.setWebhook(webhookUrl);
-    console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+    // await bot.init();
+    // const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+    // await bot.api.setWebhook(webhookUrl);
+    // console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
     console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
 }));
 const CALLBACK_ACTIONS = {
@@ -112,23 +112,7 @@ const sendSubscritionPlans = (userId) => __awaiter(void 0, void 0, void 0, funct
         },
     });
 });
-exports.bot.command("start", (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const userId = (_a = ctx.message) === null || _a === void 0 ? void 0 : _a.chat.id;
-    // createPayment(userId, 100);
-    // 0;
-    // sendFirstQuestion(userId);
-    // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-    // bot.api.sendAudio(
-    //   userId,
-    //   "https://cdn.pixabay.com/download/audio/2024/10/26/audio_00a1d6db0d.mp3?filename=midnight-quirk-255361.mp3"
-    // );
-    // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-    // bot.api.sendVideo(
-    //   userId,
-    //   "https://media.istockphoto.com/id/173045943/nl/video/sunrise-at-sea-loopable.mp4?s=mp4-640x640-is&k=20&c=suoYxxNONbOQgeIu9J9fIqYj7vV5DpNik0ZHI74P74Y="
-    // );
-}));
+(0, start_1.handleStartCommand)();
 exports.bot.on("callback_query:data", (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const callbackData = ctx.callbackQuery.data;
@@ -146,16 +130,13 @@ exports.bot.on("callback_query:data", (ctx) => __awaiter(void 0, void 0, void 0,
             yield ctx.reply("Крайний шаг и мы начинаем! Как вас зовут?");
             break;
         case "plan_100":
-            yield (0, payment_1.createPayment)(chatId, 100);
-            yield ctx.reply("Вы выбрали тариф 100");
+            (0, payment_1.createPayment)(chatId, 100);
             break;
         case "plan_200":
-            yield (0, payment_1.createPayment)(chatId, 200);
-            yield ctx.reply("Вы выбрали тариф 200");
+            (0, payment_1.createPayment)(chatId, 200);
             break;
         case "plan_300":
-            yield (0, payment_1.createPayment)(chatId, 300);
-            yield ctx.reply("Вы выбрали тариф 300");
+            (0, payment_1.createPayment)(chatId, 300);
             break;
     }
     yield ctx.answerCallbackQuery();
