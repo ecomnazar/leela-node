@@ -16,16 +16,16 @@ export const createPayment = async (userId: number, amount: number) => {
   const orderId = `${userId}-${timestamp}`;
 
   const cards = [
-    "card",
-    "card_kzt",
-    "card_uzs",
-    "card_azn",
-    "card_kgs",
-    // " skinpay",
-    // "yandexmoney",
-    // "payeer",
+    // "card",
+    // "card_kzt",
+    // "card_uzs",
+    // "card_azn",
+    // "card_kgs",
+    " skinpay",
+    "yandexmoney",
+    "payeer",
     // "crypta",
-    // "sbp",
+    "sbp",
     // "clever",
   ];
 
