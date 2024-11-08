@@ -30,7 +30,7 @@ export const createPayment = async (userId: number, amount: number) => {
   ];
 
   const response = await axios.post(
-    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${orderId}&${cards
+    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&method=sbp&user_code=${orderId}&${cards
       .map((n, index) => `list[${index}]=${n}`)
       .join("&")}`
   );
