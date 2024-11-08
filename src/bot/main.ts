@@ -169,4 +169,5 @@ bot.on("message", async (ctx) => {
   }
 });
 
-bot.start();
+// bot.start();
+//

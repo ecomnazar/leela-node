@@ -158,4 +158,5 @@ exports.bot.on("message", (ctx) => __awaiter(void 0, void 0, void 0, function* (
         sendSubscritionPlans(chatId);
     }
 }));
-exports.bot.start();
+// bot.start();
+//
