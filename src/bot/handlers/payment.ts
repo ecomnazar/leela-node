@@ -21,7 +21,7 @@ export const createPayment = async (userId: number, amount: number) => {
     // "card_uzs",
     // "card_azn",
     // "card_kgs",
-    // " skinpay",
+    "skinpay",
     // "yandexmoney",
     // "payeer",
     "crypta",
