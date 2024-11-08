@@ -14,4 +14,5 @@ router.post("/webhook-h", (req, res) => {
   //   .handleUpdate(req.body)
   //   .then(() => res.sendStatus(200)) // Успешно обработано — статус 200
   //   .catch(() => res.sendStatus(500)); // Ошибка обработки — статус 500
+  res.send("ok");
 });
