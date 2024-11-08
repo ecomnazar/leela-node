@@ -1,4 +1,5 @@
 import axios from "axios";
+import { bot } from "../main";
 
 interface ISuccessPaymentResponse {
   id: number;
@@ -19,8 +20,18 @@ export const createPayment = async (userId: number, amount: number) => {
   );
   // const url = `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${userId}`;
 
-  const data = response.data;
-  console.log(`Create payment data: ${JSON.stringify(data)}`);
+  const data = response.data as ISuccessPaymentResponse;
 
-  // return "";
+  bot.api.sendMessage(userId, "Оплатите по этой ссылке", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Оплатить",
+            url: data.url,
+          },
+        ],
+      ],
+    },
+  });
 };
