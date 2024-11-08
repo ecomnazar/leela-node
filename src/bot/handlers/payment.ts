@@ -22,11 +22,11 @@ export const createPayment = async (userId: number, amount: number) => {
     // "card_azn",
     // "card_kgs",
     "skinpay",
-    // "yandexmoney",
-    // "payeer",
+    "yandexmoney",
+    "payeer",
     "crypta",
     // "sbp",
-    // "clever",
+    "clever",
   ];
 
   const response = await axios.post(
