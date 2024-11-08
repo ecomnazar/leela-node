@@ -29,13 +29,9 @@ export const createPayment = async (userId: number, amount: number) => {
     "clever",
   ];
 
-  const response = await axios.post(`${BASE_URL}`, {
-    shop_id: SHOP_ID,
-    order_id: orderId,
-    amount,
-    token: TOKEN,
-    user_code: orderId,
-  });
+  const response = await axios.post(
+    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${orderId}&currency=RUB`
+  );
   // const url = `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${userId}`;
 
   const data = response.data as ISuccessPaymentResponse;
