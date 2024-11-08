@@ -30,11 +30,13 @@ export const createPayment = async (userId: number, amount: number) => {
   ];
 
   const response = await axios.post(
-    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${orderId}`
+    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${orderId}&method=card`
   );
   // const url = `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${userId}`;
 
   const data = response.data as ISuccessPaymentResponse;
+
+  console.log(data);
 
   if (!data.url) {
     return bot.api.sendMessage(userId, "Произошла ошибка при создании платежа");
