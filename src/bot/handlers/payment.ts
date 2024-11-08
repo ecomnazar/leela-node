@@ -22,6 +22,9 @@ export const createPayment = async (userId: number, amount: number) => {
 
   const data = response.data as ISuccessPaymentResponse;
 
+  if (!data.url) {
+    return bot.api.sendMessage(userId, "Произошла ошибка при создании платежа");
+  }
   bot.api.sendMessage(userId, "Оплатите по этой ссылке", {
     reply_markup: {
       inline_keyboard: [
