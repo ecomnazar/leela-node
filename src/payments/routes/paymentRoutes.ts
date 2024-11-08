@@ -8,12 +8,16 @@ export const router = express.Router();
 router.post("/notification/rukassa", handlePayment);
 
 router.post("/webhook-h", (req, res) => {
-  // Передаем обновление от Telegram в bot.handleUpdate
-  console.log("before");
   bot
     .handleUpdate(req.body)
-    .then(() => res.sendStatus(200)) // Успешно обработано — статус 200
-    .catch(() => res.sendStatus(500)); // Ошибка обработки — статус 500
-  console.log("after");
-  res.send("ok");
+    .then(() => {
+      res.sendStatus(200); // Успешно обработано — отправляется один ответ
+    })
+    .catch((error) => {
+      console.error(error);
+      if (!res.headersSent) {
+        // Проверяем, что заголовки еще не были отправлены
+        res.sendStatus(500); // Ошибка обработки — отправляется только один ответ
+      }
+    });
 });
