@@ -14,7 +14,7 @@ export const app = express();
 mainPayment();
 
 app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
-  await bot.api.deleteWebhook();
+  // await bot.api.deleteWebhook();
   const webhookUrl = "https://leela.steamp2e.com/webhook-h";
   await bot.api.setWebhook(webhookUrl);
   console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
