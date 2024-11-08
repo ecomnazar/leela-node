@@ -24,6 +24,7 @@ exports.app = (0, express_1.default)();
 (0, main_1.mainPayment)();
 exports.app.listen(process.env.PAYMENT_BACKEND_PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     // await bot.api.deleteWebhook();
+    yield exports.bot.init();
     const webhookUrl = "https://leela.steamp2e.com/webhook-h";
     yield exports.bot.api.setWebhook(webhookUrl);
     console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
@@ -92,19 +93,19 @@ const sendSubscritionPlans = (userId) => __awaiter(void 0, void 0, void 0, funct
                 [
                     {
                         text: "Тариф 100",
-                        url: (0, payment_1.createPayment)(userId, 100),
+                        callback_data: "plan_100",
                     },
                 ],
                 [
                     {
                         text: "Тариф 200",
-                        url: (0, payment_1.createPayment)(userId, 200),
+                        callback_data: "plan_200",
                     },
                 ],
                 [
                     {
                         text: "Тариф 300",
-                        url: (0, payment_1.createPayment)(userId, 300),
+                        callback_data: "plan_300",
                     },
                 ],
             ],
@@ -143,6 +144,18 @@ exports.bot.on("callback_query:data", (ctx) => __awaiter(void 0, void 0, void 0,
         case CALLBACK_ACTIONS.QUESTION_2_OPTION_3:
             userStates[chatId] = PENDING_STATES.WAITING_FOR_THIRD_QUESTION;
             yield ctx.reply("Крайний шаг и мы начинаем! Как вас зовут?");
+            break;
+        case "plan_100":
+            yield (0, payment_1.createPayment)(chatId, 100);
+            yield ctx.reply("Вы выбрали тариф 100");
+            break;
+        case "plan_200":
+            yield (0, payment_1.createPayment)(chatId, 200);
+            yield ctx.reply("Вы выбрали тариф 200");
+            break;
+        case "plan_300":
+            yield (0, payment_1.createPayment)(chatId, 300);
+            yield ctx.reply("Вы выбрали тариф 300");
             break;
     }
     yield ctx.answerCallbackQuery();

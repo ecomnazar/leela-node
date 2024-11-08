@@ -94,19 +94,19 @@ const sendSubscritionPlans = async (userId: number) => {
         [
           {
             text: "Тариф 100",
-            url: createPayment(userId, 100),
+            callback_data: "plan_100",
           },
         ],
         [
           {
             text: "Тариф 200",
-            url: createPayment(userId, 200),
+            callback_data: "plan_200",
           },
         ],
         [
           {
             text: "Тариф 300",
-            url: createPayment(userId, 300),
+            callback_data: "plan_300",
           },
         ],
       ],
@@ -151,6 +151,18 @@ bot.on("callback_query:data", async (ctx) => {
     case CALLBACK_ACTIONS.QUESTION_2_OPTION_3:
       userStates[chatId] = PENDING_STATES.WAITING_FOR_THIRD_QUESTION;
       await ctx.reply("Крайний шаг и мы начинаем! Как вас зовут?");
+      break;
+    case "plan_100":
+      await createPayment(chatId, 100);
+      await ctx.reply("Вы выбрали тариф 100");
+      break;
+    case "plan_200":
+      await createPayment(chatId, 200);
+      await ctx.reply("Вы выбрали тариф 200");
+      break;
+    case "plan_300":
+      await createPayment(chatId, 300);
+      await ctx.reply("Вы выбрали тариф 300");
       break;
   }
 
