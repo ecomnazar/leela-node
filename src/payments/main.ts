@@ -1,14 +1,19 @@
-require("dotenv").config();
-
-import express from "express";
+import { bot } from "../../bot";
+import { app } from "../bot/main";
 import { router } from "./routes/paymentRoutes";
+import express from "express";
 
-const app = express();
+export const mainPayment = () => {
+  app.use(express.json());
 
-app.use(express.json());
+  app.use("", router);
 
-app.use("", router);
-
-app.listen(process.env.PAYMENT_BACKEND_PORT, () => {
-  console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
-});
+  app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
+    const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+    await bot.api.setWebhook(webhookUrl);
+    console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+    console.log(
+      `Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`
+    );
+  });
+};

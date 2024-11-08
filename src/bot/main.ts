@@ -1,11 +1,16 @@
 import { Bot } from "grammy";
 import { InlineKeyboardButton, InputFile } from "grammy/types";
 import { createPayment } from "./handlers/payment";
+import express from "express";
+import { mainPayment } from "../payments/main";
 
 require("dotenv").config();
 
 const IMG_URI = "https://nazarly.digital/Untitled2.png";
 export const bot = new Bot(process.env.BOT_TOKEN!);
+export const app = express();
+
+mainPayment();
 
 const CALLBACK_ACTIONS = {
   QUESTION_1_OPTION_1: "1.1",
