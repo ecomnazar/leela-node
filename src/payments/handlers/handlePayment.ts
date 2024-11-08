@@ -26,9 +26,9 @@ export const handlePayment = (req, res) => {
       userTelegramId,
       `Успешный платеж, номер заказа: ${orderId}`
     );
+    res.send("OK");
   } else {
     console.log("not paid");
+    res.send("NOT PAID");
   }
-
-  res.send("OK");
 };
