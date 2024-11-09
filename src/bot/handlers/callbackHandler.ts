@@ -2,8 +2,8 @@ import { callbackKeyboardMaker } from "../lib/callbackKeyboardMaker";
 import { CALLBACK_ACTIONS } from "../constants/callbackActions";
 import { moveToNextScenarioApi } from "../api/scenarioApi";
 import { createPayment } from "../handlers/payment";
-import { bot } from "../main";
 import { SESSION } from "../constants/session";
+import { bot } from "../main";
 
 const replyAfterStep8 = async ({
   ctx,
