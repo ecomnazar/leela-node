@@ -1,29 +1,19 @@
-import { CALLBACK_ACTIONS } from "../constants/callbackActions";
-import { callbackKeyboardMaker } from "../lib/callbackKeyboardMaker";
+import { moveToNextScenarioApi } from "../api/scenarioApi";
 import { bot } from "../main";
 
 const IMG_URI = "https://nazarly.digital/Untitled2.png";
 
-const sendFirstQuestion = async (userId: number) => {
-  const inline_keyboard = callbackKeyboardMaker([
-    {
-      text: "У меня есть вопрос, проблема, запрос",
-      callbackData: CALLBACK_ACTIONS.QUESTION_1_OPTION_1,
-    },
-    {
-      text: "Не знаю, хочу пройти тест",
-      callbackData: CALLBACK_ACTIONS.QUESTION_1_OPTION_2,
-    },
-  ]);
-  await bot.api.sendPhoto(userId, IMG_URI, {
-    reply_markup: { inline_keyboard },
-  });
-};
-
-export const handleStartCommand = () => {
+export const handleStartCommand = async () => {
   bot.command("start", async (ctx) => {
     const userId = ctx.message?.chat.id!;
-    ctx.reply("Привет! Я бот-помощник. Начнем?");
-    // sendFirstQuestion(userId);
+    const postResponse = await moveToNextScenarioApi({
+      code: 1,
+      index: 0,
+      message: "болит голова",
+    });
+    bot.api.sendPhoto(userId, IMG_URI, {
+      caption:
+        "Приветствую! Я Neco – ваш личный помощник, использую базу знаний более 1000 экспертов, работаю на вас без выходных и перерывов на обед. Для начала определим, что для вас сегодня важно. \n\nОпишите ваш вопрос, проблему или запрос.",
+    });
   });
 };

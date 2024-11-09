@@ -1,4 +1,5 @@
 import axios from "axios";
+require("dotenv").config();
 
 export const instance = axios.create({
   baseURL: `${process.env.BACKEND_BASE_URL}/api`,

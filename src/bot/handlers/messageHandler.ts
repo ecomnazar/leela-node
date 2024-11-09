@@ -1,0 +1,110 @@
+import { getScenarioApi, moveToNextScenarioApi } from "../api/scenarioApi";
+import { CALLBACK_ACTIONS } from "../constants/callbackActions";
+import { callbackKeyboardMaker } from "../lib/callbackKeyboardMaker";
+import { bot } from "../main";
+
+export const messageHandler = () => {
+  bot.on("message", async (ctx) => {
+    const chatId = ctx.message?.chat.id!;
+    const messageText = ctx.message.text;
+
+    const response = await getScenarioApi(1);
+    const nextStep = response?.nextStep;
+
+    const postResponse = await moveToNextScenarioApi({
+      code: 1,
+      index: nextStep,
+      message: messageText || "err",
+    });
+
+    console.log(`Next step: ${nextStep}`);
+    console.log(`Message text: ${messageText}`);
+    console.log(`Get response: ${JSON.stringify(response)}`);
+    console.log(`Post response: ${JSON.stringify(postResponse)}`);
+
+    if (postResponse?.currentStep === 0) {
+      ctx.reply("Крайний шаг и мы начинаем! Как вас зовут?");
+    }
+    if (postResponse?.currentStep === 1)
+      ctx.reply(postResponse?.responseText || "Step 1 error");
+
+    if (postResponse?.currentStep === 2)
+      ctx.reply(postResponse?.responseText || "Step 2 error");
+
+    if (postResponse?.currentStep === 3)
+      ctx.reply(postResponse?.responseText || "Step 3 error");
+
+    if (postResponse?.currentStep === 4)
+      ctx.reply(postResponse?.responseText || "Step 4 error");
+
+    if (postResponse?.currentStep === 5)
+      ctx.reply(postResponse?.responseText || "Step 5 error");
+
+    if (postResponse?.currentStep === 6)
+      ctx.reply(postResponse?.responseText || "Step 6 error");
+
+    if (postResponse?.currentStep === 7) {
+      const task = `Задание 1\n\n${postResponse.task.description}\n\nАвтор: ${postResponse.task.author}\nНаграда в монетах: ${postResponse.task.reward}`;
+      const resources = postResponse.resources;
+
+      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+      ctx.reply(postResponse.responseText);
+      for (let index = 0; index < resources.length; index++) {
+        const fileUrl = resources[index].filePath;
+        await bot.api.sendAudio(
+          chatId,
+          `https://necogpt.steamp2e.com/api/storage/getMp3?filePath=${fileUrl}`
+        );
+      }
+      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+      ctx.reply(task, {
+        reply_markup: {
+          inline_keyboard: callbackKeyboardMaker([
+            {
+              text: "Отклонить",
+              callbackData: CALLBACK_ACTIONS.STEP_8_BUTTON_REJECT,
+            },
+            {
+              text: "Выполнено",
+              callbackData: CALLBACK_ACTIONS.STEP_8_BUTTON_ACCEPT,
+            },
+          ]),
+        },
+      });
+      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    }
+
+    if (messageText === "pay") {
+      // createPayment(chatId, 100);
+      // sendSubscritionPlans(chatId);
+    }
+  });
+};
+
+// const sendSubscritionPlans = async (userId: number) => {
+//     const messageText = "Выберите тариф";
+//     await bot.api.sendMessage(userId, messageText, {
+//       reply_markup: {
+//         inline_keyboard: [
+//           [
+//             {
+//               text: "Тариф 100",
+//               callback_data: "plan_100",
+//             },
+//           ],
+//           [
+//             {
+//               text: "Тариф 200",
+//               callback_data: "plan_200",
+//             },
+//           ],
+//           [
+//             {
+//               text: "Тариф 300",
+//               callback_data: "plan_300",
+//             },
+//           ],
+//         ],
+//       },
+//     });
+//   };
