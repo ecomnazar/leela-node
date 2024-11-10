@@ -22,7 +22,7 @@ export const messageHandler = () => {
 
     const postResponse = await moveToNextScenarioApi({
       code: 1,
-      index: 0,
+      index: nextStep,
       message: messageText || "err",
     });
 
