@@ -14,6 +14,7 @@ export const messageHandler = () => {
 
     if (messageText === "refreshBot") {
       deleteScenarioStepsApi(1);
+      return;
     }
 
     const response = await getScenarioApi(1);
