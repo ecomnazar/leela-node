@@ -1,4 +1,8 @@
-import { getScenarioApi, moveToNextScenarioApi } from "../api/scenarioApi";
+import {
+  deleteScenarioStepsApi,
+  getScenarioApi,
+  moveToNextScenarioApi,
+} from "../api/scenarioApi";
 import { CALLBACK_ACTIONS } from "../constants/callbackActions";
 import { callbackKeyboardMaker } from "../lib/callbackKeyboardMaker";
 import { bot } from "../main";
@@ -8,12 +12,16 @@ export const messageHandler = () => {
     const chatId = ctx.message?.chat.id!;
     const messageText = ctx.message.text;
 
+    if (messageText === "refreshBot") {
+      deleteScenarioStepsApi(1);
+    }
+
     const response = await getScenarioApi(1);
     const nextStep = response?.nextStep;
 
     const postResponse = await moveToNextScenarioApi({
       code: 1,
-      index: nextStep,
+      index: 0,
       message: messageText || "err",
     });
 
@@ -73,38 +81,5 @@ export const messageHandler = () => {
       });
       // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     }
-
-    if (messageText === "pay") {
-      // createPayment(chatId, 100);
-      // sendSubscritionPlans(chatId);
-    }
   });
 };
-
-// const sendSubscritionPlans = async (userId: number) => {
-//     const messageText = "Выберите тариф";
-//     await bot.api.sendMessage(userId, messageText, {
-//       reply_markup: {
-//         inline_keyboard: [
-//           [
-//             {
-//               text: "Тариф 100",
-//               callback_data: "plan_100",
-//             },
-//           ],
-//           [
-//             {
-//               text: "Тариф 200",
-//               callback_data: "plan_200",
-//             },
-//           ],
-//           [
-//             {
-//               text: "Тариф 300",
-//               callback_data: "plan_300",
-//             },
-//           ],
-//         ],
-//       },
-//     });
-//   };

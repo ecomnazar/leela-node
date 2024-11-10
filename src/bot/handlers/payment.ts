@@ -13,28 +13,38 @@ export const createPayment = async (userId: number, amount: number) => {
   const SHOP_ID = process.env.RU_KASSA_SHOP_ID;
 
   const timestamp = Date.now();
-  const orderId = `${userId}-${timestamp}`;
+  const orderID = `${userId}-${timestamp}`;
 
   const cards = [
-    // "card",
-    // "card_kzt",
-    // "card_uzs",
-    // "card_azn",
-    // "card_kgs",
+    "card",
+    "card_kzt",
+    "card_uzs",
+    "card_azn",
+    "card_kgs",
     "skinpay",
     "yandexmoney",
     "payeer",
     "crypta",
-    // "sbp",
+    "sbp",
     "clever",
   ];
 
+  const body = {
+    user_code: orderID,
+    currency: "USD",
+    list: cards,
+  };
+
+  // cards
+  //     .map((n, index) => `list[${index}]=${n}`)
+  //     .join("&")
+
+  console.log(20);
+
   const response = await axios.post(
-    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${orderId}&${cards
-      .map((n, index) => `list[${index}]=${n}`)
-      .join("&")}`
+    `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderID}&amount=${20}&token=${TOKEN}&user_code=${orderID}&currency=USD`,
+    body
   );
-  // const url = `${BASE_URL}?shop_id=${SHOP_ID}&order_id=${orderId}&amount=${amount}&token=${TOKEN}&user_code=${userId}`;
 
   const data = response.data as ISuccessPaymentResponse;
 

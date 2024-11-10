@@ -25,6 +25,8 @@ export const getScenarioApi = async (code: number): Promise<IScenario> => {
   }
 };
 
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
 interface IMoveToNextScenarioApiProps {
   code: number;
   index: number;
@@ -39,6 +41,27 @@ export const moveToNextScenarioApi = async (
     const response = await instance.post(`/scenarios/${code}/steps/${index}`, {
       message,
     });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error(
+        `AxiosError: Request failed with status code ${error.response?.status}`
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+    }
+    throw error;
+  }
+};
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+export const deleteScenarioStepsApi = async (
+  code: number
+): Promise<IScenario> => {
+  try {
+    const response = await instance.delete(`/scenarios/${code}`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
