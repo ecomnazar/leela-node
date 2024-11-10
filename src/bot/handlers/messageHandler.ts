@@ -30,7 +30,7 @@ export const messageHandler = () => {
     console.log(`Get response: ${JSON.stringify(response)}`);
     console.log(`Post response: ${JSON.stringify(postResponse)}`);
 
-    if (response?.currentStep === 0) {
+    if (response?.nextStep === 0) {
       ctx.reply("Крайний шаг и мы начинаем! Как вас зовут?");
     }
     if (postResponse?.currentStep === 1)
