@@ -4,6 +4,7 @@ import { handleStartCommand } from "./commands/start";
 import { callbackHandler } from "./handlers/callbackHandler";
 import { messageHandler } from "./handlers/messageHandler";
 import { SESSION } from "./constants/session";
+import { mainPayment } from "../payments/main";
 
 require("dotenv").config();
 
@@ -46,7 +47,7 @@ export const app = express();
 
 bot.use(session({ initial }));
 
-// mainPayment();
+mainPayment();
 
 app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
   await bot.api.deleteWebhook();
