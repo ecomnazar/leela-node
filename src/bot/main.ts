@@ -49,17 +49,17 @@ bot.use(session({ initial }));
 
 mainPayment();
 
-app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
-  await bot.api.deleteWebhook();
-  await bot.init();
-  const webhookUrl = "https://leela.steamp2e.com/webhook-h";
-  await bot.api.setWebhook(webhookUrl);
-  console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
-  console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
-});
+// app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
+//   await bot.api.deleteWebhook();
+//   await bot.init();
+//   const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+//   await bot.api.setWebhook(webhookUrl);
+//   console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+//   console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
+// });
 
-handleStartCommand();
-callbackHandler();
-messageHandler();
+// handleStartCommand();
+// callbackHandler();
+// messageHandler();
 
 // bot.start();

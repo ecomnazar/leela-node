@@ -65,10 +65,9 @@ const replyAfterStep9 = async ({
     code: 1,
     index: 10,
   });
-  console.log(postResponse);
-
-  const responseText = postResponse.responseText;
-  ctx.reply(responseText);
+  // it shows 7 statistics those will be shown in miniapp
+  // const responseText = postResponse.responseText;
+  // ctx.reply(responseText);
 
   const author = postResponse.task.author;
   const reward = postResponse.task.reward;
