@@ -27,6 +27,7 @@ const initial = (): SessionData => {
     stepPaymentQuestionsCurrentQuestionIndex: 0,
     stepPaymentTotalPrice: 0,
     paymentQuestionMessageId: 0,
+    tenQuestionMessageId: 0,
   };
 };
 

@@ -1,3 +1,4 @@
+import { removePrevMessage, setMessageId } from "../lib/removePrevMessage";
 import { callbackKeyboardMaker } from "../lib/callbackKeyboardMaker";
 import { PAYMENT_QUESTIONS } from "../constants/paymentQuestions";
 import { CALLBACK_ACTIONS } from "../constants/callbackActions";
@@ -158,21 +159,29 @@ const sendNextQuestion = async (ctx: any) => {
     CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_4,
   ];
 
-  ctx.reply(post, {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          // @ts-ignore
-          ...answersEveryThirdIndex.map((_, index) => {
-            return {
-              text: `Ответ ${index + 1}`,
-              callback_data: buttons[index],
-            };
-          }),
+  const message = await ctx.replyWithPhoto(
+    `https://nazarly.digital/questionSteps/${currentQuestionIndex + 1}.JPG`,
+    {
+      caption: post,
+      reply_markup: {
+        inline_keyboard: [
+          [
+            // @ts-ignore
+            ...answersEveryThirdIndex.map((_, index) => {
+              return {
+                text: `Ответ ${index + 1}`,
+                callback_data: buttons[index],
+              };
+            }),
+          ],
         ],
-      ],
-    },
-  });
+      },
+    }
+  );
+
+  // Delete previous message if it exists
+  removePrevMessage(ctx, SESSION.TEN_QUESTION_MESSAGE_ID);
+  setMessageId(ctx, SESSION.TEN_QUESTION_MESSAGE_ID, message.message_id);
 };
 
 // 10 QUESTIONS STARTS HERE
@@ -338,21 +347,6 @@ const sendNextPaymentQuestion = async (ctx: any) => {
   const currentPaymentQuestionIndex =
     ctx.session[SESSION.PAYMENT_QUESTIONS_CURRENT_QUESTION_INDEX];
 
-  // Delete previous payment question message if it exists
-  if (ctx.session[SESSION.PAYMENT_QUESTION_MESSAGE_ID]) {
-    try {
-      await ctx.api.deleteMessage(
-        ctx.chat.id,
-        ctx.session[SESSION.PAYMENT_QUESTION_MESSAGE_ID]
-      );
-    } catch (error) {
-      console.error(
-        "Failed to delete previous payment question message:",
-        error
-      );
-    }
-  }
-
   // Handle end of questions
   if (currentPaymentQuestionIndex === PAYMENT_QUESTIONS.length) {
     handlePaymentPlansEnd(ctx);
@@ -384,8 +378,10 @@ const sendNextPaymentQuestion = async (ctx: any) => {
     }
   );
 
+  // Delete previous message if it exists
+  removePrevMessage(ctx, SESSION.PAYMENT_QUESTION_MESSAGE_ID);
   // Store the message ID of the current payment question
-  ctx.session[SESSION.PAYMENT_QUESTION_MESSAGE_ID] = message.message_id;
+  setMessageId(ctx, SESSION.PAYMENT_QUESTION_MESSAGE_ID, message.message_id);
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

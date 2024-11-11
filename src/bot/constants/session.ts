@@ -6,4 +6,5 @@ export const SESSION = {
     "stepPaymentQuestionsCurrentQuestionIndex",
   PAYMENT_TOTAL_PRICE: "stepPaymentTotalPrice",
   PAYMENT_QUESTION_MESSAGE_ID: "paymentQuestionMessageId",
+  TEN_QUESTION_MESSAGE_ID: "tenQuestionMessageId",
 } as const;
