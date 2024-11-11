@@ -62,6 +62,8 @@ export const deleteScenarioStepsApi = async (
   try {
     const response = await instance.delete(`/scenarios/${code}`);
     console.log(response.data);
+    console.log("refreshSuccess");
+
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {

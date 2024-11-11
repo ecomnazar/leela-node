@@ -114,34 +114,68 @@ const sendNextQuestion = async (ctx: any) => {
     await showStep13Result(ctx);
     await showStep14Result(ctx);
     showStep15Result(ctx);
-    // showStep13Result()
-    // showStep14Result()
-    // showStep15Result()
 
     return;
   }
-  ctx.reply(`Вопрос ${currentQuestion}`, {
+
+  const splittedQuestion = currentQuestion?.split("\n");
+  const answers = splittedQuestion.slice(1);
+
+  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+  // @ts-ignore
+  let answersEveryThirdIndex = answers.filter((_, index) => index % 3 === 0);
+  // Step 2: Remove the last element if it's empty
+  if (
+    answersEveryThirdIndex[answersEveryThirdIndex.length - 1] === undefined ||
+    answersEveryThirdIndex[answersEveryThirdIndex.length - 1] === null ||
+    answersEveryThirdIndex[answersEveryThirdIndex.length - 1] === ""
+  ) {
+    answersEveryThirdIndex.pop();
+  }
+
+  // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+  const question = splittedQuestion[0];
+  let productionAnswers = "";
+
+  for (let index = 0; index < answersEveryThirdIndex.length; index++) {
+    const element = answersEveryThirdIndex[index];
+    if (index === answersEveryThirdIndex.length - 1) {
+      // remove break line in last answer
+      productionAnswers += `${element}`;
+    } else {
+      productionAnswers += `${element}\n\n`;
+    }
+  }
+
+  const post = `Вопрос ${question}\n\n${productionAnswers}`;
+
+  const buttons = [
+    CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_1,
+    CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_2,
+    CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_3,
+    CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_4,
+  ];
+
+  ctx.reply(post, {
     reply_markup: {
       inline_keyboard: [
         [
-          {
-            text: "Ответ 1",
-            callback_data: CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_1,
-          },
-          {
-            text: "Ответ 2",
-            callback_data: CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_2,
-          },
-          {
-            text: "Ответ 3",
-            callback_data: CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_3,
-          },
+          // @ts-ignore
+          ...answersEveryThirdIndex.map((_, index) => {
+            return {
+              text: `Ответ ${index + 1}`,
+              callback_data: buttons[index],
+            };
+          }),
         ],
       ],
     },
   });
 };
 
+// 10 QUESTIONS STARTS HERE
 const replyAfterStep10 = async ({
   ctx,
   chatId,
@@ -287,11 +321,11 @@ const handlePaymentPlansEnd = (ctx: any) => {
       inline_keyboard: [
         [
           {
-            text: `Оплатить за 1 день: ${calculatePrice(ctx, "day")}$`,
+            text: `За 1 день: ${calculatePrice(ctx, "day")}$`,
             callback_data: CALLBACK_ACTIONS.SELECT_1_DAY_PLAN,
           },
           {
-            text: `Оплатить за 3 месяца: ${calculatePrice(ctx, "month")}$`,
+            text: `За 3 месяца: ${calculatePrice(ctx, "month")}$`,
             callback_data: CALLBACK_ACTIONS.SELECT_3_MONTH_PLAN,
           },
         ],
@@ -431,6 +465,9 @@ export const callbackHandler = () => {
         break;
       case CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_3:
         selectAnswer(ctx, 3);
+        break;
+      case CALLBACK_ACTIONS.STEP_11_QUESTION_QUIZ_ANSWER_4:
+        selectAnswer(ctx, 4);
         break;
 
       // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
