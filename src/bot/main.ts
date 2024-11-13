@@ -28,6 +28,8 @@ const initial = (): SessionData => {
     stepPaymentTotalPrice: 0,
     paymentQuestionMessageId: 0,
     tenQuestionMessageId: 0,
+    sessionFirstPaymentPlanUrl: "",
+    sessionSecondPaymentPlanUrl: "",
   };
 };
 
@@ -52,10 +54,10 @@ mainPayment();
 
 app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
   await bot.api.deleteWebhook();
-  // await bot.init();
-  // const webhookUrl = "https://leela.steamp2e.com/webhook-h";
-  // await bot.api.setWebhook(webhookUrl);
-  // console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+  await bot.init();
+  const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+  await bot.api.setWebhook(webhookUrl);
+  console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
   console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
 });
 
@@ -63,4 +65,4 @@ handleStartCommand();
 callbackHandler();
 messageHandler();
 
-bot.start();
+// bot.start();

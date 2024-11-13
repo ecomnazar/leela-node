@@ -6,6 +6,7 @@ import { moveToNextScenarioApi } from "../api/scenarioApi";
 import { createPayment } from "../handlers/payment";
 import { SESSION } from "../constants/session";
 import { bot } from "../main";
+import { calculatePrice } from "../lib/calculatePrice";
 
 const replyAfterStep8 = async ({
   ctx,
@@ -309,17 +310,20 @@ const handlePaymentQuestion = (ctx: any, answer: "yes" | "no") => {
   sendNextPaymentQuestion(ctx);
 };
 
-const handlePlanSelect = (ctx: any, chatId: number, type: "day" | "month") => {
+const handlePlanSelect = async (
+  ctx: any,
+  chatId: number,
+  type: "day" | "month"
+) => {
   const price = calculatePrice(ctx, type);
-  createPayment(chatId, price);
-};
-
-const calculatePrice = (ctx: any, type: "day" | "month") => {
-  const totalPrice = ctx.session[SESSION.PAYMENT_TOTAL_PRICE];
-  if (type === "day") {
-    return (Number(totalPrice) / 20).toFixed(0);
-  } else {
-    return totalPrice;
+  const response = await createPayment(chatId, price);
+  if (response) {
+    if (type === "day") {
+      ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL] = response;
+    }
+    if (type === "month") {
+      ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL] = response;
+    }
   }
 };
 
@@ -331,11 +335,11 @@ const handlePaymentPlansEnd = (ctx: any) => {
         [
           {
             text: `За 1 день: ${calculatePrice(ctx, "day")}$`,
-            callback_data: CALLBACK_ACTIONS.SELECT_1_DAY_PLAN,
+            url: SESSION.FIRST_PAYMENT_PLAN_URL,
           },
           {
             text: `За 3 месяца: ${calculatePrice(ctx, "month")}$`,
-            callback_data: CALLBACK_ACTIONS.SELECT_3_MONTH_PLAN,
+            url: SESSION.SECOND_PAYMENT_PLAN_URL,
           },
         ],
       ],
@@ -346,6 +350,11 @@ const handlePaymentPlansEnd = (ctx: any) => {
 const sendNextPaymentQuestion = async (ctx: any) => {
   const currentPaymentQuestionIndex =
     ctx.session[SESSION.PAYMENT_QUESTIONS_CURRENT_QUESTION_INDEX];
+
+  if (currentPaymentQuestionIndex === 13) {
+    handlePlanSelect(ctx, ctx.chat.id, "day");
+    handlePlanSelect(ctx, ctx.chat.id, "month");
+  }
 
   // Handle end of questions
   if (currentPaymentQuestionIndex === PAYMENT_QUESTIONS.length) {
