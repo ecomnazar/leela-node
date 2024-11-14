@@ -7,6 +7,7 @@ import { createPayment } from "../handlers/payment";
 import { SESSION } from "../constants/session";
 import { bot } from "../main";
 import { calculatePrice } from "../lib/calculatePrice";
+import { createInvoiceLink } from "../lib/createInvoiceLink";
 
 const replyAfterStep8 = async ({
   ctx,
@@ -316,13 +317,16 @@ const handlePlanSelect = async (
   type: "day" | "month"
 ) => {
   const price = calculatePrice(ctx, type);
-  const response = await createPayment(chatId, price);
-  if (response) {
+  const invoiceLink = await createInvoiceLink(chatId, price);
+  console.log(invoiceLink);
+
+  // const response = await createPayment(chatId, price);
+  if (invoiceLink) {
     if (type === "day") {
-      ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL] = response;
+      ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL] = invoiceLink;
     }
     if (type === "month") {
-      ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL] = response;
+      ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL] = invoiceLink;
     }
   }
 };
