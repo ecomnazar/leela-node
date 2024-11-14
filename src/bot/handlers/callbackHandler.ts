@@ -335,11 +335,11 @@ const handlePaymentPlansEnd = (ctx: any) => {
         [
           {
             text: `За 1 день: ${calculatePrice(ctx, "day")}$`,
-            url: SESSION.FIRST_PAYMENT_PLAN_URL || "1",
+            url: ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL],
           },
           {
             text: `За 3 месяца: ${calculatePrice(ctx, "month")}$`,
-            url: SESSION.SECOND_PAYMENT_PLAN_URL || "2",
+            url: ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL],
           },
         ],
       ],
@@ -358,7 +358,9 @@ const sendNextPaymentQuestion = async (ctx: any) => {
 
   // Handle end of questions
   if (currentPaymentQuestionIndex === PAYMENT_QUESTIONS.length) {
-    console.log("here");
+    console.log(ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL]);
+    console.log(ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL]);
+
     handlePaymentPlansEnd(ctx);
     return;
   }
