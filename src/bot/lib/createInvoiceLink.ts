@@ -11,5 +11,5 @@ export const createInvoiceLink = async (chatId: number, usdAmount: number) => {
 
   const response = await axios.get(url);
 
-  return response.data;
+  return response;
 };
