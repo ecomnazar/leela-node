@@ -317,7 +317,7 @@ const handlePlanSelect = async (
   type: "day" | "month"
 ) => {
   const price = calculatePrice(ctx, type);
-  const invoiceLink = await createInvoiceLink(chatId, 1);
+  const invoiceLink = await createInvoiceLink(chatId, 10);
 
   // const response = await createPayment(chatId, price);
   if (invoiceLink) {
