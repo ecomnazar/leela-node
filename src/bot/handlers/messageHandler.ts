@@ -12,6 +12,8 @@ export const messageHandler = () => {
     const chatId = ctx.message?.chat.id!;
     const messageText = ctx.message.text;
 
+    if (!messageText) return;
+
     if (messageText === "refreshBot") {
       deleteScenarioStepsApi(1);
       return;

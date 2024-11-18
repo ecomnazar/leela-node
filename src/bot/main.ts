@@ -54,10 +54,10 @@ mainPayment();
 
 app.listen(process.env.PAYMENT_BACKEND_PORT, async () => {
   await bot.api.deleteWebhook();
-  // await bot.init();
-  // const webhookUrl = "https://leela.steamp2e.com/webhook-h";
-  // await bot.api.setWebhook(webhookUrl);
-  // console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
+  await bot.init();
+  const webhookUrl = "https://leela.steamp2e.com/webhook-h";
+  await bot.api.setWebhook(webhookUrl);
+  console.log(`Вебхук зарегистрирован на ${webhookUrl}`);
   console.log(`Server is running on port ${process.env.PAYMENT_BACKEND_PORT}`);
 });
 
@@ -75,24 +75,27 @@ bot.on("pre_checkout_query", async (ctx) => {
 const paidUsers = new Map();
 
 bot.on("message:successful_payment", (ctx) => {
+  console.log(ctx.message.successful_payment);
   if (!ctx.message || !ctx.message.successful_payment || !ctx.from) {
     return;
   }
+
+  console.log(ctx.from.id);
+  console.log(JSON.stringify(ctx.message.successful_payment));
+  console.log(ctx.message.successful_payment);
 
   paidUsers.set(
     ctx.from.id,
     ctx.message.successful_payment.telegram_payment_charge_id
   );
-
-  console.log(ctx.message.successful_payment);
 });
 
 bot.command("status", (ctx) => {
   // @ts-ignore
-  const message = paidUsers.has(ctx.from.id)
-    ? "You have paid"
-    : "You have not paid yet";
-  return ctx.reply(message);
+  // const message = paidUsers.has(ctx.from.id)
+  //   ? "You have paid"
+  //   : "You have not paid yet";
+  // return ctx.reply(message);
 });
 
-bot.start();
+// bot.start();

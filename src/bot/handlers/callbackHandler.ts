@@ -311,24 +311,24 @@ const handlePaymentQuestion = (ctx: any, answer: "yes" | "no") => {
   sendNextPaymentQuestion(ctx);
 };
 
-const handlePlanSelect = async (
-  ctx: any,
-  chatId: number,
-  type: "day" | "month"
-) => {
-  const price = calculatePrice(ctx, type);
-  const invoiceLink = await createInvoiceLink(chatId, 10);
+// const handlePlanSelect = async (
+//   ctx: any,
+//   chatId: number,
+//   type: "day" | "month"
+// ) => {
+//   const price = calculatePrice(ctx, type);
+//   const invoiceLink = await createInvoiceLink(chatId, price);
 
-  // const response = await createPayment(chatId, price);
-  if (invoiceLink) {
-    if (type === "day") {
-      ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL] = invoiceLink;
-    }
-    if (type === "month") {
-      ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL] = invoiceLink;
-    }
-  }
-};
+//   // const response = await createPayment(chatId, price);
+//   if (invoiceLink) {
+//     if (type === "day") {
+//       ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL] = invoiceLink;
+//     }
+//     if (type === "month") {
+//       ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL] = invoiceLink;
+//     }
+//   }
+// };
 
 const handlePaymentPlansEnd = (ctx: any) => {
   const text = `Отлично! Мы готовим ваш тариф. Сейчас Neco работает в тестовом режиме до 25.12.2024. Поэтому дарим вам доступ на 3 месяца по цене одного.`;
@@ -338,11 +338,13 @@ const handlePaymentPlansEnd = (ctx: any) => {
         [
           {
             text: `За 1 день: ${calculatePrice(ctx, "day")}$`,
-            url: ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL],
+            callback_data: CALLBACK_ACTIONS.SELECT_1_DAY_PLAN,
+            // url: ctx.session[SESSION.FIRST_PAYMENT_PLAN_URL],
           },
           {
             text: `За 3 месяца: ${calculatePrice(ctx, "month")}$`,
-            url: ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL],
+            callback_data: CALLBACK_ACTIONS.SELECT_3_MONTH_PLAN,
+            // url: ctx.session[SESSION.SECOND_PAYMENT_PLAN_URL],
           },
         ],
       ],
@@ -355,8 +357,8 @@ const sendNextPaymentQuestion = async (ctx: any) => {
     ctx.session[SESSION.PAYMENT_QUESTIONS_CURRENT_QUESTION_INDEX];
 
   if (currentPaymentQuestionIndex === 13) {
-    handlePlanSelect(ctx, ctx.chat.id, "day");
-    handlePlanSelect(ctx, ctx.chat.id, "month");
+    // handlePlanSelect(ctx, ctx.chat.id, "day");
+    // handlePlanSelect(ctx, ctx.chat.id, "month");
   }
 
   // Handle end of questions
@@ -397,6 +399,31 @@ const sendNextPaymentQuestion = async (ctx: any) => {
   removePrevMessage(ctx, SESSION.PAYMENT_QUESTION_MESSAGE_ID);
   // Store the message ID of the current payment question
   setMessageId(ctx, SESSION.PAYMENT_QUESTION_MESSAGE_ID, message.message_id);
+};
+
+const sendPriceInTelegramStars = (ctx: any, type: "day" | "month") => {
+  const price = calculatePrice(ctx, type);
+  const priceInStars = price * 50;
+
+  return ctx.replyWithInvoice(
+    "Neco",
+    `Итоговое списание происходит в валюте Telegram stars. Подтвердите оплату подписки за 3 месяца за $${price}.`,
+    "{}",
+    "XTR",
+    [{ amount: 1, label: `Подтвердить ${priceInStars}⭐` }],
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: `Оплатить ${priceInStars}⭐`,
+              pay: true,
+            },
+          ],
+        ],
+      },
+    }
+  );
 };
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -504,10 +531,10 @@ export const callbackHandler = () => {
       // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
       case CALLBACK_ACTIONS.SELECT_1_DAY_PLAN:
-        handlePlanSelect(ctx, chatId, "day");
+        sendPriceInTelegramStars(ctx, "day");
         break;
       case CALLBACK_ACTIONS.SELECT_3_MONTH_PLAN:
-        handlePlanSelect(ctx, chatId, "month");
+        sendPriceInTelegramStars(ctx, "month");
         break;
     }
   });
