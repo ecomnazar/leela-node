@@ -65,20 +65,29 @@ handleStartCommand();
 callbackHandler();
 messageHandler();
 
+// bot.on("pre_checkout_query", async (ctx) => {
+//   return ctx.answerPreCheckoutQuery(true).catch(() => {
+//     console.error("answerPreCheckoutQuery failed");
+//   });
+// });
+
 bot.on("pre_checkout_query", async (ctx) => {
-  return ctx.answerPreCheckoutQuery(true).catch(() => {
+  console.log("pre_checkout_query");
+  try {
+    return await ctx.answerPreCheckoutQuery(true);
+  } catch {
     console.error("answerPreCheckoutQuery failed");
-  });
+  }
 });
 
 bot.on("message:successful_payment", (ctx) => {
   console.log("Payment successful!");
 });
 
-bot.use(async (ctx, next) => {
-  console.log("Incoming update:", JSON.stringify(ctx.update, null, 2));
-  await next();
-});
+// bot.use(async (ctx, next) => {
+//   console.log("Incoming update:", JSON.stringify(ctx.update, null, 2));
+//   await next();
+// });
 
 // const paidUsers = new Map();
 
