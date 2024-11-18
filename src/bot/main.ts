@@ -71,31 +71,44 @@ bot.on("pre_checkout_query", async (ctx) => {
   });
 });
 
-// Map is used for simplicity. For production use a database
-const paidUsers = new Map();
-
 bot.on("message:successful_payment", (ctx) => {
-  console.log(ctx.message.successful_payment);
-  if (!ctx.message || !ctx.message.successful_payment || !ctx.from) {
-    return;
-  }
-
-  console.log(ctx.from.id);
-  console.log(JSON.stringify(ctx.message.successful_payment));
-  console.log(ctx.message.successful_payment);
-
-  paidUsers.set(
-    ctx.from.id,
-    ctx.message.successful_payment.telegram_payment_charge_id
-  );
+  console.log("Payment successful!");
 });
 
-bot.command("status", (ctx) => {
-  // @ts-ignore
-  // const message = paidUsers.has(ctx.from.id)
-  //   ? "You have paid"
-  //   : "You have not paid yet";
-  // return ctx.reply(message);
+bot.use(async (ctx, next) => {
+  console.log("Incoming update:", JSON.stringify(ctx.update, null, 2));
+  await next();
 });
+
+// const paidUsers = new Map();
+
+// bot.on("message:successful_payment", (ctx) => {
+//   console.log("hi");
+//   if (!ctx.message || !ctx.message.successful_payment || !ctx.from) {
+//     console.error("Invalid payment message");
+//     return;
+//   }
+
+//   const userId = ctx.from.id;
+//   const paymentChargeId =
+//     ctx.message.successful_payment.telegram_payment_charge_id;
+
+//   console.log("User ID:", userId);
+//   console.log("Payment Charge ID:", paymentChargeId);
+//   console.log("Successful payment details:", ctx.message.successful_payment);
+
+//   // Сохраняем данные о пользователе и платеже
+//   paidUsers.set(userId, paymentChargeId);
+//   ctx.reply(`Спасибо за оплату, ${ctx.from.first_name}!`);
+// });
+
+// bot.command("status", (ctx) => {
+//   console.log("hi");
+//   // @ts-ignore
+//   // const message = paidUsers.has(ctx.from.id)
+//   //   ? "You have paid"
+//   //   : "You have not paid yet";
+//   // return ctx.reply(message);
+// });
 
 // bot.start();
