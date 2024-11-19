@@ -24,6 +24,11 @@ export const handleStartCommand = async () => {
     //   }
     // );
 
+    // ctx.reply("Hi!");
+    // ctx.reply("<b>Задание 1</b>\n\nSalam", {
+    //   parse_mode: "HTML",
+    // });
+
     const userId = ctx.message?.chat.id!;
     bot.api.sendPhoto(userId, IMG_URI, {
       caption:

@@ -31,7 +31,7 @@ const replyAfterStep8 = async ({
   const reward = postResponse.task.reward;
   const description = postResponse.task.description;
 
-  const taskText = `Задание 2\n\n${description}\n\nАвтор: ${author}\nНаграда в монетах: ${reward}`;
+  const taskText = `<b>Задание 2</b>\n\n${description}\n\nАвтор: ${author}\nНаграда в монетах: ${reward}`;
 
   bot.api.sendMessage(chatId, taskText, {
     reply_markup: {
@@ -46,6 +46,7 @@ const replyAfterStep8 = async ({
         },
       ]),
     },
+    parse_mode: "HTML",
   });
 };
 
@@ -76,7 +77,7 @@ const replyAfterStep9 = async ({
   const reward = postResponse.task.reward;
   const description = postResponse.task.description;
 
-  const taskText = `Задание 3\n\n${description}\n\nАвтор: ${author}\nНаграда в монетах: ${reward}`;
+  const taskText = `<b>Задание 3</b>\n\n${description}\n\nАвтор: ${author}\nНаграда в монетах: ${reward}`;
 
   bot.api.sendMessage(chatId, taskText, {
     reply_markup: {
@@ -91,6 +92,7 @@ const replyAfterStep9 = async ({
         },
       ]),
     },
+    parse_mode: "HTML",
   });
 };
 

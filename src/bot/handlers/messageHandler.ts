@@ -55,19 +55,11 @@ export const messageHandler = () => {
       ctx.reply(postResponse?.responseText || "Step 6 error");
 
     if (postResponse?.currentStep === 7) {
-      const task = `Задание 1\n\n${postResponse.task.description}\n\nАвтор: ${postResponse.task.author}\nНаграда в монетах: ${postResponse.task.reward}`;
+      const task = `<b>Задание 1</b>\n\n${postResponse.task.description}\n\nАвтор: ${postResponse.task.author}\nНаграда в монетах: ${postResponse.task.reward}`;
       const resources = postResponse.resources;
 
-      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
       ctx.reply(postResponse.responseText);
-      for (let index = 0; index < resources.length; index++) {
-        const fileUrl = resources[index].filePath;
-        await bot.api.sendAudio(
-          chatId,
-          `https://necogpt.steamp2e.com/api/storage/getMp3?filePath=${fileUrl}`
-        );
-      }
-      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
       ctx.reply(task, {
         reply_markup: {
           inline_keyboard: callbackKeyboardMaker([
@@ -81,7 +73,18 @@ export const messageHandler = () => {
             },
           ]),
         },
+        parse_mode: "HTML",
       });
+      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+      // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+      for (let index = 0; index < resources.length; index++) {
+        const fileUrl = resources[index].filePath;
+        await bot.api.sendAudio(
+          chatId,
+          `https://necogpt.steamp2e.com/api/storage/getMp3?filePath=${fileUrl}`
+        );
+      }
       // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --          -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     }
   });
